@@ -5,8 +5,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-# Likelihood of transition from (row) to (column). Order: A, C, G, T.
 to_index = {'A': 0, 'C': 1, 'G': 2, 'T': 3}
+# Likelihood of transition from (row) to (column). Order: A, C, G, T.
 trans_cpgi = np.array([[0.20871, 0.24734, 0.43353, 0.12142],
                        [0.15532, 0.35906, 0.29398, 0.19163],
                        [0.16185, 0.34990, 0.36959, 0.11866],
