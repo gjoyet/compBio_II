@@ -7,22 +7,14 @@ to_state = {0: 'A+', 1: 'C+', 2: 'G+', 3: 'T+',
             4: 'A-', 5: 'C-', 6: 'G-', 7: 'T-'}
 # Likelihood of transition from (row) to (column).
 # Order: A+, C+, G+, T+, A-, C-, G-, T-.
-trans_cpgi = np.array([[0.20871, 0.24734, 0.43353, 0.12142],
-                       [0.15532, 0.35906, 0.29398, 0.19163],
-                       [0.16185, 0.34990, 0.36959, 0.11866],
-                       [0.10273, 0.34874, 0.34338, 0.20515]])
-trans = np.concatenate((0.2*trans_cpgi, trans_cpgi))
-trans = np.concatenate((trans, 1.5*trans), axis=1)
+trans = np.array()
 
 # Emission probabilities.
 # Order: A+, C+, G+, T+, A-, C-, G-, T-.
-emission = np.array(trans[0, :])
+emission = np.array()
 
 
 def viterbi(sequence: str) -> ndarray:
-    # This is wrong: I need the transition / emission matrices AND
-    # need to keep at least two columns of v at a time.
-
     n = len(sequence)
     char = sequence[0]
     v = np.zeros((8, n))
