@@ -11,7 +11,7 @@ to_state = {0: 'A+', 1: 'C+', 2: 'G+', 3: 'T+',
 
 class BaumWelch:
 
-    def __init__(self, seqs: list[str]):
+    def __init__(self, seqs: list[str], tol=10**-8):
         # transition probabilities from row to column (8x8 matrix)
         self.tp = np.random.randn(10, 10) * 0.01 + 1.0 / 8.0
         self.tp[:, to_index['S']] = np.zeros((10,))
@@ -21,10 +21,17 @@ class BaumWelch:
         self.ep = np.concatenate((np.eye(4), np.eye(4), np.zeros((2, 4))))
         # sequences
         self.seqs = seqs
+        self.tol = tol
 
     def run(self):
-        for i in range(5):
-            self.iterate()
+        p = 1.0
+        p_next = 0.0
+        counts = 0
+        while abs(p - p_next) > self.tol:
+            counts += 1
+            p = p_next
+            p_next = self.iterate()
+        return counts
 
     def iterate(self):
         all_f = []
@@ -46,7 +53,6 @@ class BaumWelch:
                     for i, char in enumerate(s):
                         a[k, l] += (1.0 / all_p[j]) * all_f[j, k, i] * self.tp[k, l] * \
                                    self.ep[l, to_index[char]] * all_b[j, l, i+1]
-        # TODO: fix issue in here (for now, commented it out since the emission probabilities are known in this problem)
         e = np.zeros_like(self.ep)
         for k in range(8):
             for beta in range(4):
@@ -59,6 +65,7 @@ class BaumWelch:
         nep = np.sum(e, axis=1)[:, np.newaxis]
         self.tp = np.divide(a, ntp, out=self.tp, where=ntp != 0)
         self.ep = np.divide(e, nep, out=self.ep, where=nep != 0)
+        return np.sum(all_p)
 
     def forward(self, seq: str) -> (ndarray, float):
         n = len(seq)
@@ -89,6 +96,10 @@ if __name__ == '__main__':
     seqs = ['ACGTACGT',
             'ACGTACGT']
     bw = BaumWelch(seqs)
-    bw.run()
+    c = bw.run()
+    print('\nIterations until convergence with tolerance {}: {}\n'.format(bw.tol, c))
+    print('Transition matrix:')
     print(bw.tp)
+    print('')
+    print('Emission probabilities:')
     print(bw.ep)
