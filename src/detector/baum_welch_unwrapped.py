@@ -1,6 +1,9 @@
 import numpy as np
 from numpy import ndarray
 
+
+# Contributors: Guillaume Joyet, Janni Batsilas, Manuela Wildi, Noah Müller
+
 to_index = {'A': 0, 'C': 1, 'G': 2, 'T': 3,
             'A+': 0, 'C+': 1, 'G+': 2, 'T+': 3,
             'A-': 4, 'C-': 5, 'G-': 6, 'T-': 7,
