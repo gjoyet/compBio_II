@@ -16,11 +16,11 @@ class BaumWelch:
         self.tol = tol
         pass
 
-    def run(self, min_iter=25) -> int:
+    def run(self, max_iter=300) -> int:
         counts = 0
         p = 1.0
         p_next = 0.0
-        while abs(p_next - p) > self.tol or counts < min_iter:
+        while abs(p_next - p) > self.tol and counts < max_iter:
             counts += 1
             p = p_next
             p_next = self.iterate()
